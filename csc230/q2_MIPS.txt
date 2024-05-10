@@ -1,0 +1,33 @@
+Place the text for the answer of Question 2 in this file, after the
+"====".
+
+Do not rename this file.
+
+You can use your own choice of text editor.
+
+After saving this file, upload the result to Brightspace. (Use the
+"Add File" button that appears below the question's textbox.)
+
+====
+.text
+
+	# comment 1
+	# comment 2
+		# comment 3
+# comment 4
+
+label_a:
+	lw $8, label_b
+	add $10, $0, $0
+	add $9, $0, 32
+
+loop_label_a:
+	beq $9, $0, label_c
+	andi $11, $8, 0x1
+	beq $11, $0, label_d
+	addi $10, $10, 1
+
+label_d:
+	srl $8, $8, 1
+	addi $9, $9, -1
+	beq $0, $0, label_a		

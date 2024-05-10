@@ -1,0 +1,23 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Debug (Launch) - Current File",
+            "request": "launch",
+            "mainClass": "${file}",
+            "args": "sample1.txt sample2.txt sample3-mac.txt"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-A6Tester<Assign_6_3079c8cf>",
+            "request": "launch",
+            "mainClass": "A6Tester",
+            "args": "sample1.txt sample2.txt sample3-max.txt",
+            "projectName": "Assign_6_3079c8cf"
+        }
+    ]
+}

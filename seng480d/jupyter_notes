@@ -1,0 +1,3 @@
+try: conda activate quantum
+then: jupyter notebook
+try openning jupyter from anaconda if the environmeent isn't working properly

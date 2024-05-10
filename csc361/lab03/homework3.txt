@@ -1,0 +1,68 @@
+Homework 3
+Nick Wurzer
+V00958568
+csc361
+
+dns recursive:
+The recursive approach results in less work for each node for one dns lookup.  The downside to this approach is that it could result in
+a large load on the root server since addresses cannot be cached by the local dns server and every query will have to go through a root dns server.
+
+reading from file dns-reth0.cap, link-type EN10MB (Ethernet)
+17:40:03.223023 IP (tos 0x0, ttl 64, id 15592, offset 0, flags [none], proto UDP (17), length 60)
+    192.168.1.100.56246 > 172.16.1.1.domain: [udp sum ok] 58592+ A? www.youtube.ca. (32)
+17:40:03.223308 IP (tos 0x0, ttl 64, id 4375, offset 0, flags [DF], proto UDP (17), length 209)
+    172.16.1.1.domain > 192.168.1.100.56246: [udp sum ok] 58592 q: A? www.youtube.ca. 8/0/0 www.youtube.ca. [3m43s] CNAME youtube-ui.l.google.com., youtube-ui.l.google.com. [3m43s] A 142.250.217.110, youtube-ui.l.google.com. [3m43s] A 172.217.14.206, youtube-ui.l.google.com. [3m43s] A 172.217.14.238, youtube-ui.l.google.com. [3m43s] A 142.250.69.206, youtube-ui.l.google.com. [3m43s] A 142.251.33.110, youtube-ui.l.google.com. [3m43s] A 142.251.33.78, youtube-ui.l.google.com. [3m43s] A 142.250.217.78 (181)
+17:40:03.224646 IP (tos 0x0, ttl 64, id 15593, offset 0, flags [none], proto UDP (17), length 69)
+    192.168.1.100.47206 > 172.16.1.1.domain: [udp sum ok] 9840+ AAAA? youtube-ui.l.google.com. (41)
+17:40:03.224871 IP (tos 0x0, ttl 64, id 4376, offset 0, flags [DF], proto UDP (17), length 181)
+    172.16.1.1.domain > 192.168.1.100.47206: [udp sum ok] 9840 q: AAAA? youtube-ui.l.google.com. 4/0/0 youtube-ui.l.google.com. [3m43s] AAAA 2607:f8b0:400a:80b::200e, youtube-ui.l.google.com. [3m43s] AAAA 2607:f8b0:400a:801::200e, youtube-ui.l.google.com. [3m43s] AAAA 2607:f8b0:400a:806::200e, youtube-ui.l.google.com. [3m43s] AAAA 2607:f8b0:400a:80a::200e (153)
+17:40:08.346062 ARP, Ethernet (len 6), IPv4 (len 4), Request who-has 192.168.1.100 tell 192.168.1.1, length 28
+17:40:08.346062 ARP, Ethernet (len 6), IPv4 (len 4), Request who-has 192.168.1.1 tell 192.168.1.100, length 28
+17:40:08.346105 ARP, Ethernet (len 6), IPv4 (len 4), Reply 192.168.1.1 is-at 3e:e0:5c:d2:b0:c5 (oui Unknown), length 28
+17:40:08.346105 ARP, Ethernet (len 6), IPv4 (len 4), Reply 192.168.1.100 is-at 32:df:07:54:be:24 (oui Unknown), length 28
+
+dns iterative:
+As we can see, the iterative approach results in a much larger load on the local dns server.  We can see there are many more queries here than with the recursive call from the local host.
+The advantage to this approach is that the local dns server will cache many of these ip addresses so that not as many queries have to go through the root dns server.
+
+reading from file dns-reth2.cap, link-type EN10MB (Ethernet)
+17:38:44.121860 IP6 (hlim 255, next-header ICMPv6 (58) payload length: 16) fe80::c08c:4ff:fe40:8229 > ip6-allrouters: [icmp6 sum ok] ICMP6, router solicitation, length 16
+	  source link-address option (1), length 8 (1): c2:8c:04:40:82:29
+	    0x0000:  c28c 0440 8229
+17:38:45.636056 ARP, Ethernet (len 6), IPv4 (len 4), Request who-has 172.16.1.2 tell 172.16.1.1, length 28
+17:38:45.636084 ARP, Ethernet (len 6), IPv4 (len 4), Reply 172.16.1.2 is-at aa:f6:4f:99:58:b4 (oui Unknown), length 28
+17:38:45.636090 IP (tos 0x0, ttl 64, id 6632, offset 0, flags [DF], proto UDP (17), length 60)
+    172.16.1.1.16271 > b-2016.b.root-servers.net.domain: [udp sum ok] 45225 A? www.youtube.ca. (32)
+17:38:45.669313 IP (tos 0x0, ttl 46, id 5384, offset 0, flags [none], proto UDP (17), length 313)
+    b-2016.b.root-servers.net.domain > 172.16.1.1.16271: [udp sum ok] 45225- q: A? www.youtube.ca. 0/4/8 ns: ca. [2d] NS c.ca-servers.ca., ca. [2d] NS j.ca-servers.ca., ca. [2d] NS x.ca-servers.ca., ca. [2d] NS any.ca-servers.ca. ar: c.ca-servers.ca. [2d] A 185.159.196.2, c.ca-servers.ca. [2d] AAAA 2620:10a:8053::2, j.ca-servers.ca. [2d] A 198.182.167.1, j.ca-servers.ca. [2d] AAAA 2001:500:83::1, x.ca-servers.ca. [2d] A 199.253.250.68, x.ca-servers.ca. [2d] AAAA 2620:10a:80ba::68, any.ca-servers.ca. [2d] A 199.4.144.2, any.ca-servers.ca. [2d] AAAA 2001:500:a7::2 (285)
+17:38:46.727445 IP (tos 0x0, ttl 64, id 44674, offset 0, flags [DF], proto UDP (17), length 60)
+    172.16.1.1.17138 > x.ca-servers.ca.domain: [udp sum ok] 60233 [b2&3=0x80] A? www.youtube.ca. (32)
+17:38:46.883815 IP (tos 0x0, ttl 40, id 64546, offset 0, flags [none], proto UDP (17), length 142)
+    x.ca-servers.ca.domain > 172.16.1.1.17138: [udp sum ok] 60233- q: A? www.youtube.ca. 0/4/0 ns: youtube.ca. [1d] NS ns1.google.com., youtube.ca. [1d] NS ns2.google.com., youtube.ca. [1d] NS ns3.google.com., youtube.ca. [1d] NS ns4.google.com. (114)
+17:38:46.884149 IP (tos 0x0, ttl 64, id 64672, offset 0, flags [DF], proto UDP (17), length 60)
+    172.16.1.1.16851 > i.root-servers.net.domain: [udp sum ok] 35157 A? ns4.google.com. (32)
+17:38:46.930400 IP (tos 0x0, ttl 47, id 28268, offset 0, flags [none], proto UDP (17), length 523)
+    i.root-servers.net.domain > 172.16.1.1.16851: [udp sum ok] 35157- q: A? ns4.google.com. 0/13/14 ns: com. [2d] NS a.gtld-servers.net., com. [2d] NS e.gtld-servers.net., com. [2d] NS i.gtld-servers.net., com. [2d] NS k.gtld-servers.net., com. [2d] NS b.gtld-servers.net., com. [2d] NS m.gtld-servers.net., com. [2d] NS h.gtld-servers.net., com. [2d] NS d.gtld-servers.net., com. [2d] NS g.gtld-servers.net., com. [2d] NS f.gtld-servers.net., com. [2d] NS c.gtld-servers.net., com. [2d] NS j.gtld-servers.net., com. [2d] NS l.gtld-servers.net. ar: m.gtld-servers.net. [2d] A 192.55.83.30, l.gtld-servers.net. [2d] A 192.41.162.30, k.gtld-servers.net. [2d] A 192.52.178.30, j.gtld-servers.net. [2d] A 192.48.79.30, i.gtld-servers.net. [2d] A 192.43.172.30, h.gtld-servers.net. [2d] A 192.54.112.30, g.gtld-servers.net. [2d] A 192.42.93.30, f.gtld-servers.net. [2d] A 192.35.51.30, e.gtld-servers.net. [2d] A 192.12.94.30, d.gtld-servers.net. [2d] A 192.31.80.30, c.gtld-servers.net. [2d] A 192.26.92.30, b.gtld-servers.net. [2d] A 192.33.14.30, a.gtld-servers.net. [2d] A 192.5.6.30, m.gtld-servers.net. [2d] AAAA 2001:501:b1f9::30 (495)
+17:38:46.930749 IP (tos 0x0, ttl 64, id 8801, offset 0, flags [DF], proto UDP (17), length 60)
+    172.16.1.1.15512 > m.gtld-servers.net.domain: [udp sum ok] 36915 A? ns4.google.com. (32)
+17:38:46.982803 IP (tos 0x0, ttl 46, id 35101, offset 0, flags [none], proto UDP (17), length 304)
+    m.gtld-servers.net.domain > 172.16.1.1.15512: [udp sum ok] 36915- q: A? ns4.google.com. 0/4/8 ns: google.com. [2d] NS ns2.google.com., google.com. [2d] NS ns1.google.com., google.com. [2d] NS ns3.google.com., google.com. [2d] NS ns4.google.com. ar: ns2.google.com. [2d] AAAA 2001:4860:4802:34::a, ns2.google.com. [2d] A 216.239.34.10, ns1.google.com. [2d] AAAA 2001:4860:4802:32::a, ns1.google.com. [2d] A 216.239.32.10, ns3.google.com. [2d] AAAA 2001:4860:4802:36::a, ns3.google.com. [2d] A 216.239.36.10, ns4.google.com. [2d] AAAA 2001:4860:4802:38::a, ns4.google.com. [2d] A 216.239.38.10 (276)
+17:38:46.983017 IP (tos 0x0, ttl 64, id 45213, offset 0, flags [DF], proto UDP (17), length 60)
+    172.16.1.1.16027 > ns4.google.com.domain: [udp sum ok] 42652 A? www.youtube.ca. (32)
+17:38:47.043924 IP (tos 0x0, ttl 94, id 31662, offset 0, flags [none], proto UDP (17), length 209)
+    ns4.google.com.domain > 172.16.1.1.16027: [udp sum ok] 42652*- q: A? www.youtube.ca. 8/0/0 www.youtube.ca. [1d] CNAME youtube-ui.l.google.com., youtube-ui.l.google.com. [5m] A 142.251.33.78, youtube-ui.l.google.com. [5m] A 142.250.217.78, youtube-ui.l.google.com. [5m] A 142.250.217.110, youtube-ui.l.google.com. [5m] A 172.217.14.206, youtube-ui.l.google.com. [5m] A 172.217.14.238, youtube-ui.l.google.com. [5m] A 142.250.69.206, youtube-ui.l.google.com. [5m] A 142.251.33.110 (181)
+17:38:47.045290 IP (tos 0x0, ttl 64, id 42753, offset 0, flags [DF], proto UDP (17), length 69)
+    172.16.1.1.17559 > a.gtld-servers.net.domain: [udp sum ok] 59289 AAAA? youtube-ui.l.google.com. (41)
+17:38:47.051516 IP (tos 0x0, ttl 48, id 55557, offset 0, flags [none], proto UDP (17), length 317)
+    a.gtld-servers.net.domain > 172.16.1.1.17559: [udp sum ok] 59289- q: AAAA? youtube-ui.l.google.com. 0/4/8 ns: google.com. [2d] NS ns2.google.com., google.com. [2d] NS ns1.google.com., google.com. [2d] NS ns3.google.com., google.com. [2d] NS ns4.google.com. ar: ns2.google.com. [2d] AAAA 2001:4860:4802:34::a, ns2.google.com. [2d] A 216.239.34.10, ns1.google.com. [2d] AAAA 2001:4860:4802:32::a, ns1.google.com. [2d] A 216.239.32.10, ns3.google.com. [2d] AAAA 2001:4860:4802:36::a, ns3.google.com. [2d] A 216.239.36.10, ns4.google.com. [2d] AAAA 2001:4860:4802:38::a, ns4.google.com. [2d] A 216.239.38.10 (289)
+17:38:47.051751 IP (tos 0x0, ttl 64, id 28599, offset 0, flags [DF], proto UDP (17), length 69)
+    172.16.1.1.16448 > ns2.google.com.domain: [udp sum ok] 31463 AAAA? youtube-ui.l.google.com. (41)
+17:38:47.061517 IP (tos 0x0, ttl 101, id 4099, offset 0, flags [none], proto UDP (17), length 181)
+    ns2.google.com.domain > 172.16.1.1.16448: [udp sum ok] 31463*- q: AAAA? youtube-ui.l.google.com. 4/0/0 youtube-ui.l.google.com. [5m] AAAA 2607:f8b0:400a:806::200e, youtube-ui.l.google.com. [5m] AAAA 2607:f8b0:400a:80a::200e, youtube-ui.l.google.com. [5m] AAAA 2607:f8b0:400a:80b::200e, youtube-ui.l.google.com. [5m] AAAA 2607:f8b0:400a:801::200e (153)
+17:38:50.778055 ARP, Ethernet (len 6), IPv4 (len 4), Request who-has 172.16.1.1 tell 172.16.1.2, length 28
+17:38:50.778143 ARP, Ethernet (len 6), IPv4 (len 4), Reply 172.16.1.1 is-at c2:8c:04:40:82:29 (oui Unknown), length 28
+
+
+I ran tcp dump on my local computer and got a lot of traffic and had to figure out how to kill the process.
+I think the main difference is the address of my router.  Although I did not attempt to capture traffic from my router I assume that it has cached many addresses,
+and therefore does not have to go through the root dns server.
